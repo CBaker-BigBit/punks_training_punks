@@ -1,0 +1,1501 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Burger Punk Training</title>
+  <style>
+    :root {
+      --font-scale: 1.1;
+      --font-body: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+      --font-display: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    }
+    body {
+      margin: 0;
+      font-family: var(--font-body);
+      font-size: calc(16px * var(--font-scale));
+      background: radial-gradient(circle at top, #200014 0%, #090209 55%, #040204 100%);
+      color: #ffe6f7;
+    }
+    .page {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 40px 20px 60px;
+    }
+    .hero {
+      text-align: center;
+      padding: 44px 30px 36px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 32px;
+      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(14px);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top, rgba(255, 20, 100, 0.16), transparent 55%);
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at top left, rgba(255, 120, 210, 0.34), transparent 34%),
+        radial-gradient(circle at top right, rgba(255, 120, 210, 0.34), transparent 34%),
+        radial-gradient(circle at bottom left, rgba(255, 120, 210, 0.34), transparent 34%),
+        radial-gradient(circle at bottom right, rgba(255, 120, 210, 0.34), transparent 34%);
+      pointer-events: none;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+    .hero-logo {
+      max-width: 180px;
+      margin: 0 auto 22px;
+      display: block;
+      border-radius: 22px;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+    }
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: calc(72px * var(--font-scale));
+      margin: 0 0 18px;
+      letter-spacing: 0.16em;
+      line-height: 1.02;
+      color: #ff7bc4;
+      text-shadow: 0 12px 30px rgba(217, 17, 93, 0.24);
+    }
+    .hero p {
+      font-size: calc(20px * var(--font-scale));
+      max-width: 860px;
+      margin: 0 auto;
+      color: #ffdeee;
+      line-height: 1.75;
+      font-family: var(--font-body);
+    }
+    .tab-bar {
+      margin-top: 34px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+    }
+    .sub-tab-bar {
+      margin-top: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+    .tab-button,
+    .sub-tab-button {
+      font-family: var(--font-display);
+      border: 4px solid #ff2fb8;
+      background: rgba(255, 192, 217, 0.08);
+      color: #ffe6f7;
+      cursor: pointer;
+      font-size: calc(16px * var(--font-scale));
+      border-radius: 0;
+      transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease;
+      font-weight: 700;
+    }
+    .tab-button {
+      padding: 14px 24px;
+    }
+    .sub-tab-button {
+      padding: 14px 28px;
+      font-size: calc(15px * var(--font-scale));
+      min-width: 190px;
+    }
+    .tab-button.active,
+    .sub-tab-button.active {
+      background: #ff2fb8;
+      color: #100010;
+      border-color: #ff2fb8;
+      box-shadow: 0 18px 40px rgba(255, 47, 184, 0.24);
+    }
+    .tab-button:hover,
+    .sub-tab-button:hover {
+      transform: translateY(-1px);
+      background: rgba(255, 47, 184, 0.18);
+      color: #fff;
+    }
+    .tab-content {
+      margin-top: 30px;
+    }
+    .section-card {
+      background: rgba(10, 5, 10, 0.92);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 28px;
+      padding: 30px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+    }
+    .sub-tab-content {
+      display: none;
+      margin-top: 18px;
+    }
+    .sub-tab-content.active {
+      display: block;
+    }
+    .food-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+      margin-top: 20px;
+    }
+    .food-card {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+      border: 4px solid #ff2fb8;
+      border-radius: 28px;
+      padding: 24px;
+      text-align: center;
+      box-shadow: 0 0 0 4px rgba(255, 47, 184, 0.45), 0 20px 40px rgba(255, 47, 184, 0.24);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: stretch;
+    }
+    .food-card h2 {
+      font-family: var(--font-display);
+      font-size: calc(32px * var(--font-scale));
+      margin-bottom: 16px;
+      min-height: 84px;
+      line-height: 1.05;
+      letter-spacing: 0.08em;
+      color: #ff8bce;
+      text-transform: uppercase;
+    }
+    .food-card img {
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: 0 20px 45px rgba(1, 18, 45, 0.35);
+      cursor: zoom-in;
+      transition: transform 0.25s ease;
+      image-rendering: optimizeQuality;
+      image-rendering: -webkit-optimize-contrast;
+      backface-visibility: hidden;
+      transform: translateZ(0);
+    }
+    .food-card img:hover {
+      transform: scale(1.02) translateZ(0);
+    }
+    .food-card .view-description {
+      margin-top: 14px;
+      font-size: calc(14px * var(--font-scale));
+      color: #ffd4f1;
+      text-decoration: underline;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      cursor: default;
+      text-align: center;
+    }
+    .food-card .view-description.clickable {
+      cursor: pointer;
+    }
+    .food-card .view-description:hover {
+      color: #ffffff;
+    }
+    .food-card p,
+    .lightbox-caption,
+    .hero p,
+    .hero h1,
+    .tab-button {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+    }
+    .note {
+      margin-top: 24px;
+      font-size: calc(15px * var(--font-scale));
+      color: #f9d2eb;
+    }
+    .menu-descriptions-list {
+      margin-top: 24px;
+      display: grid;
+      gap: 14px;
+    }
+    .description-category {
+      font-family: var(--font-display);
+      font-size: calc(26px * var(--font-scale));
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #ff9ee3;
+      margin-top: 18px;
+      border-bottom: 2px solid rgba(255, 47, 184, 0.45);
+      padding-bottom: 8px;
+    }
+    .menu-description-item {
+      position: relative;
+      background: rgba(255, 47, 184, 0.08);
+      border: 2px solid #ff2fb8;
+      border-radius: 18px;
+      padding: 18px 20px;
+      color: #ffe6f7;
+      font-size: calc(15px * var(--font-scale));
+      line-height: 1.6;
+      box-shadow: 0 12px 28px rgba(255, 47, 184, 0.12);
+      padding-bottom: 56px;
+    }
+    .menu-description-item strong {
+      display: block;
+      margin-bottom: 8px;
+      color: #ffffff;
+      font-size: calc(16px * var(--font-scale));
+      letter-spacing: 0.08em;
+    }
+    .view-item-button {
+      position: absolute;
+      right: 18px;
+      bottom: 18px;
+      display: inline-block;
+      background: #ff2fb8;
+      color: #100010;
+      border: 3px solid #ff2fb8;
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-size: calc(14px * var(--font-scale));
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+    .view-item-button:hover {
+      transform: translateY(-1px);
+      background: #ff7ce4;
+    }
+    .menu-test-list {
+      margin-top: 24px;
+      display: grid;
+      gap: 18px;
+    }
+    .menu-test-item {
+      background: rgba(255, 47, 184, 0.08);
+      border: 2px solid #ff2fb8;
+      border-radius: 18px;
+      padding: 22px 20px 30px;
+      color: #ffe6f7;
+      font-size: calc(15px * var(--font-scale));
+      line-height: 1.7;
+      box-shadow: 0 12px 28px rgba(255, 47, 184, 0.12);
+      position: relative;
+      min-height: 120px;
+    }
+    .menu-test-item strong {
+      display: block;
+      margin-bottom: 10px;
+      color: #ffffff;
+      font-size: calc(16px * var(--font-scale));
+      letter-spacing: 0.08em;
+    }
+    .name-input,
+    .blank-input {
+      width: 180px;
+      min-width: 140px;
+      display: inline-block;
+      margin: 0 4px;
+      padding: 8px 10px;
+      border-radius: 0;
+      border: 2px solid #1a1a1a;
+      background: #ffd6ea;
+      color: #100010;
+      font-size: calc(14px * var(--font-scale));
+      outline: none;
+      box-shadow:
+        -7px -7px 14px rgba(0, 0, 0, 0.42),
+        7px -7px 14px rgba(0, 0, 0, 0.42),
+        -7px 7px 14px rgba(0, 0, 0, 0.42),
+        7px 7px 14px rgba(0, 0, 0, 0.42);
+      transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    }
+    .blank-input option {
+      background: #ffd6ea;
+      color: #100010;
+    }
+    .name-input:focus,
+    .blank-input:focus {
+      border-color: #ff2fb8;
+      background: #ffdff0;
+      box-shadow:
+        -7px -7px 16px rgba(0, 0, 0, 0.55),
+        7px -7px 16px rgba(0, 0, 0, 0.55),
+        -7px 7px 16px rgba(0, 0, 0, 0.55),
+        7px 7px 16px rgba(0, 0, 0, 0.55);
+    }
+    .blank-input.correct {
+      border-color: #30d88a;
+      background: rgba(48, 216, 138, 0.16);
+    }
+    .blank-input.incorrect {
+      border-color: #ff4c8e;
+      background: rgba(255, 76, 142, 0.16);
+    }
+    .menu-test-actions {
+      margin-top: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+    .test-feedback {
+      margin-top: 18px;
+      color: #ffffff;
+      font-size: calc(16px * var(--font-scale));
+      line-height: 1.6;
+    }
+    .menu-link-button {
+      display: inline-block;
+      margin-top: 18px;
+      padding: 14px 28px;
+      background: #ff2fb8;
+      color: #100010;
+      border: 4px solid #ff2fb8;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 700;
+      box-shadow: 0 18px 40px rgba(255, 47, 184, 0.24);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .menu-link-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 22px 44px rgba(255, 47, 184, 0.28);
+    }
+    .slideshow-player {
+      margin-top: 18px;
+    }
+    .slideshow-frame {
+      width: 100%;
+      max-width: 100%;
+      min-height: 320px;
+      border-radius: 24px;
+      overflow: hidden;
+      background: #090209;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .slideshow-frame img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+    .slideshow-caption {
+      margin-top: 14px;
+      color: #ffe6f7;
+      font-size: calc(16px * var(--font-scale));
+      font-weight: 700;
+      min-height: 24px;
+    }
+    .slideshow-controls {
+      margin-top: 16px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .slideshow-button {
+      border: 4px solid #ff2fb8;
+      background: rgba(255, 192, 217, 0.08);
+      color: #ffe6f7;
+      cursor: pointer;
+      font-size: calc(15px * var(--font-scale));
+      border-radius: 999px;
+      padding: 12px 22px;
+      font-weight: 700;
+      transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+    }
+    .slideshow-button:hover {
+      transform: translateY(-1px);
+      background: rgba(255, 47, 184, 0.18);
+      color: #fff;
+    }
+    .presentation-frame {
+      position: relative;
+      width: 100%;
+      margin-top: 18px;
+      max-width: 840px;
+    }
+    .presentation-object {
+      width: 100%;
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+      display: block;
+    }
+    .embedded-menu-frame {
+      width: 100%;
+      min-height: 760px;
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+      background: #090209;
+      overflow: hidden;
+      margin-top: 18px;
+    }
+    .embedded-menu-frame iframe {
+      width: 100%;
+      height: 100%;
+      min-height: 760px;
+      border: none;
+      border-radius: 24px;
+      display: block;
+    }
+    .embedded-menu-fallback {
+      margin-top: 18px;
+      color: #ffe6f7;
+      font-size: calc(16px * var(--font-scale));
+    }
+    .embedded-menu-fallback a {
+      color: #ff2fb8;
+      text-decoration: underline;
+    }
+    .presentation-overlay-button {
+      position: absolute;
+      right: 22px;
+      top: 22px;
+      z-index: 2;
+      background: rgba(255, 47, 184, 0.94);
+      color: #100010;
+      padding: 14px 22px;
+      border: 4px solid #ff2fb8;
+      outline: 5px solid #000000;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 700;
+      box-shadow: 0 18px 40px rgba(255, 47, 184, 0.24);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      position: absolute;
+    }
+    .presentation-overlay-button::before,
+    .presentation-overlay-button::after {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #ffe600;
+      font-weight: 900;
+      font-size: 20px;
+      letter-spacing: -1px;
+      text-shadow: 2px 2px 0 #000000;
+      pointer-events: none;
+    }
+    .presentation-overlay-button::before {
+      content: '<<';
+      left: -24px;
+    }
+    .presentation-overlay-button::after {
+      content: '>>';
+      right: -24px;
+    }
+    .presentation-overlay-button:hover {
+      transform: translateY(-2px);
+      background: #ff4ad3;
+      box-shadow: 0 22px 44px rgba(255, 47, 184, 0.32);
+    }
+    .presentation-note {
+      margin-top: 14px;
+      font-size: calc(15px * var(--font-scale));
+      color: #f9d2eb;
+    }
+    .note {
+      margin-top: 24px;
+      font-size: 15px;
+      color: #f9d2eb;
+    }
+    .blank-note {
+      margin-top: 0;
+      color: #f9d2eb;
+    }
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.88);
+      z-index: 9999;
+      padding: 24px;
+    }
+    .lightbox.active {
+      display: flex;
+    }
+    .lightbox-content {
+      width: min(90vw, 1000px);
+      height: min(85vh, 800px);
+      position: relative;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .lightbox-content img {
+      width: auto;
+      height: auto;
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: 24px;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
+      image-rendering: optimizeQuality;
+      image-rendering: -webkit-optimize-contrast;
+      backface-visibility: hidden;
+      transform: translateZ(0);
+      object-fit: contain;
+    }
+    .lightbox-close {
+      position: absolute;
+      top: -18px;
+      right: -18px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #ff2fb8;
+      color: #100010;
+      border: none;
+      font-size: 22px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.4);
+    }
+    .lightbox-caption {
+      margin-top: 14px;
+      color: #ffe6f7;
+      font-size: calc(16px * var(--font-scale));
+      font-weight: 700;
+    }
+    .description-modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.86);
+      z-index: 10000;
+      padding: 24px;
+    }
+    .description-modal.active {
+      display: flex;
+    }
+    .description-modal-content {
+      width: min(560px, 100%);
+      background: linear-gradient(180deg, #ffb3e0 0%, #ff79cb 100%);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 28px;
+      padding: 28px 28px 22px;
+      box-shadow: 0 28px 80px rgba(0, 0, 0, 0.18);
+      color: #100010;
+      text-align: left;
+      position: relative;
+      overflow: hidden;
+    }
+    .description-modal-logo {
+      position: absolute;
+      bottom: 14px;
+      right: 14px;
+      width: 112px;
+      height: 112px;
+      object-fit: contain;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      background: rgba(255, 255, 255, 0.18);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
+      pointer-events: none;
+    }
+    .description-modal h3 {
+      margin: 0 0 18px;
+      font-size: calc(24px * var(--font-scale));
+      letter-spacing: 0.12em;
+      color: #100010;
+      text-transform: uppercase;
+    }
+    .description-modal p,
+    .description-modal ul {
+      margin: 0;
+      font-size: calc(18px * var(--font-scale));
+      line-height: 1.7;
+      color: #100010;
+    }
+    .tab-content {
+      font-size: calc(18px * var(--font-scale)) !important;
+    }
+    .tab-content > h2 {
+      font-size: calc(38px * var(--font-scale)) !important;
+    }
+    #blank-menu-test label {
+      font-size: calc(16px * var(--font-scale)) !important;
+    }
+    .description-modal ul {
+      padding-left: 20px;
+      margin-top: 12px;
+    }
+    .description-modal li {
+      margin-bottom: 10px;
+      list-style: disc;
+    }
+    .description-modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: none;
+      background: #100010;
+      color: #ffd4f1;
+      font-size: 20px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
+    }
+    @media (max-width: 840px) {
+      .hero h1 {
+        font-size: calc(54px * var(--font-scale));
+      }
+      .food-card h2 {
+        font-size: calc(28px * var(--font-scale));
+      }
+      .tab-button {
+        flex: 1 1 auto;
+      }
+    }
+    @media (max-width: 520px) {
+      .page {
+        padding: 24px 16px 36px;
+      }
+      .hero {
+        padding: 28px 18px 26px;
+      }
+      .hero h1 {
+        font-size: calc(42px * var(--font-scale));
+      }
+      .hero-logo {
+        max-width: 140px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="hero">
+      <div class="hero-content">
+        <img class="hero-logo" src="./bp-assets-web/punklogo.jpeg" alt="Burger Punk Logo" />
+        <h1>BURGER PUNK TRAINING</h1>
+        <p>WELCOME TO BURGER PUNK TRAINING WEBSITE. THE GOAL OF THIS WEBSITE IS TO GIVE YOU ALL THE TOOLS NECESSARY TO SUCCEED AT BURGER PUNK.</p>
+      </div>
+    </div>
+    <div class="tab-bar">
+      <button class="tab-button active" data-tab="menu-descriptions">MENU DESCRIPTIONS</button>
+      <button class="tab-button" data-tab="food-pics">FOOD PICS</button>
+      <button class="tab-button" data-tab="food-slide-show">FOOD SLIDE SHOW</button>
+      <button class="tab-button" data-tab="burger-punk-menu">BURGER PUNK MENU</button>
+      <button class="tab-button" data-tab="blank-menu-test">PRACTICE TEST</button>
+    </div>
+    <div class="tab-content active section-card" id="menu-descriptions" style="font-size: 18px;">
+      <h2 style="font-size: 38px; margin-bottom: 18px;">MENU DESCRIPTIONS</h2>
+      <p style="text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700;">USE THIS SECTION TO REVIEW THE BURGER PUNK ITEM DESCRIPTIONS THAT ALSO APPEAR IN THE FOOD PICS CARDS. CLICK THE TAB TO SEE THE FULL MENU DOCUMENT.</p>
+
+      <div class="menu-descriptions-list">
+        <div class="description-category">Burgers</div>
+        <div class="menu-description-item" data-food="THETA"><strong>THETA BURGER</strong> &mdash; Brioche Bun, Ground Beef Patty, Mayonnaise, Pickles, Hickory Sauce, Cheddar Cheese.<button class="view-item-button" data-food="THETA">VIEW ITEM</button></div>
+        <div class="menu-description-item" data-food="NASHVILLE HOT CHICKEN"><strong>NASHVILLE HOT CHICKEN</strong> &mdash; Brioche Bun, Nashville Breaded Chicken Breast, Nashville Hot Oil, House-made Cole Slaw, Nashville Glaze, Pickles.<button class="view-item-button" data-food="NASHVILLE HOT CHICKEN">VIEW ITEM</button></div>
+        <div class="menu-description-item" data-food="PUNK CHICK SANDY"><strong>PUNK CHICK SANDY</strong> &mdash; Brioche Bun, Fried Marinated Punk Chicken Breast, Punk Sauce, Lettuce, Pickles.<button class="view-item-button" data-food="PUNK CHICK SANDY">VIEW ITEM</button></div>
+        <div class="menu-description-item" data-food="ONION"><strong>ONION SMASH BURGER</strong> &mdash; Brioche Bun, Smashed Ground Beef Patty, Thinly Sliced Grilled Onions, Punk Sauce, Pickles, American Cheese.<button class="view-item-button" data-food="ONION">VIEW ITEM</button></div>
+        <div class="menu-description-item" data-food="GREEN CHILI"><strong>GREEN CHILI BURGER</strong> &mdash; Brioche Bun, Ground Beef Patty, Punk Ranch, Bacon, Roasted Anaheim Peppers, American Cheese.<button class="view-item-button" data-food="GREEN CHILI">VIEW ITEM</button></div>
+        <div class="menu-description-item" data-food="WHISKEY MUSHROOM BURGER"><strong>WHISKEY MUSHROOM BURGER</strong> &mdash; Brioche Bun, Ground Beef Patty, Swiss Cheese, Grilled Mushrooms, Whiskey Go Go Sauce, Truffle Mayo.<button class="view-item-button" data-food="WHISKEY MUSHROOM BURGER">VIEW ITEM</button></div>
+        <div class="menu-description-item" data-food="GREEN DAZE"><strong>GREEN DAZE</strong> &mdash; Brioche Bun, Veggie Patty, American Cheese, Lettuce, Punk Sauce, Pickles.<button class="view-item-button" data-food="GREEN DAZE">VIEW ITEM</button></div>
+        <div class="menu-description-item" data-food="OG PUNK"><strong>OG PUNK</strong> &mdash; Brioche Bun, Ground Beef Patty, Punk Sauce, Lettuce, Pickles, American Cheese.<button class="view-item-button" data-food="OG PUNK">VIEW ITEM</button></div>
+        <div class="menu-description-item" data-food="THE CLASH"><strong>THE CLASH</strong> &mdash; Brioche Bun, Ground Beef Patty, Hoison Mayo, Cilantro, Lime Juice, Nacho Cheese Doritos, American Cheese, Grilled Onions, Grilled Jalapenos.<button class="view-item-button" data-food="THE CLASH">VIEW ITEM</button></div>
+
+        <div class="description-category">Wings</div>
+        <div class="menu-description-item" data-food="LEMON PEPPER WINGS"><strong>LEMON PEPPER WINGS</strong> &mdash; 6 or 12 chicken wings, House-made lemon pepper seasoning, Lemon juice, Lemon zest, Lemon wedges.<button class="view-item-button" data-food="LEMON PEPPER WINGS">VIEW ITEM</button></div>
+        <div class="menu-description-item" data-food="NASHVILLE HOT WINGS"><strong>NASHVILLE HOT WINGS</strong> &mdash; 6 or 12 chicken wings, Nashville Hot Oil, Dill Pickles.<button class="view-item-button" data-food="NASHVILLE HOT WINGS">VIEW ITEM</button></div>
+        <div class="menu-description-item" data-food="BUFFALO BILLY WINGS"><strong>BUFFALO BILLY WINGS</strong> &mdash; 6 or 12 chicken wings, House-made Buffalo Billy Sauce, Chives, Celery Sticks.<button class="view-item-button" data-food="BUFFALO BILLY WINGS">VIEW ITEM</button></div>
+        <div class="menu-description-item" data-food="SWEET BABY BOURBON"><strong>SWEET BABY BOURBON</strong> &mdash; 6 or 12 chicken wings, House-made Whiskey Go-Go Sauce, White Sesame Seeds.<button class="view-item-button" data-food="SWEET BABY BOURBON">VIEW ITEM</button></div>
+        <div class="menu-description-item" data-food="TRUFFLE GARLIC PARM"><strong>TRUFFLE GARLIC PARM</strong> &mdash; 6 or 12 chicken wings, Truffle Oil, Parmesan Cheese, Garlic Butter, Parsley.<button class="view-item-button" data-food="TRUFFLE GARLIC PARM">VIEW ITEM</button></div>
+        <div class="menu-description-item" data-food="HOT PICKLE WINGS"><strong>HOT PICKLE WINGS</strong> &mdash; 6 or 12 chicken wings, House-made Hot Pickle Sauce, Dill Pickles.<button class="view-item-button" data-food="HOT PICKLE WINGS">VIEW ITEM</button></div>
+
+        <div class="description-category">Macs & Other Snacks</div>
+        <div class="menu-description-item" data-food="NOT-SO-BASIC SALAD"><strong>NOT-SO-BASIC SALAD</strong> &mdash; Leaf Lettuce, Beer Vinaigrette, Tomato, Cucumber, Bacon, Bleu Cheese Crumbles, Hard-Boiled Egg; Add Chicken (Optional).<button class="view-item-button" data-food="NOT-SO-BASIC SALAD">VIEW ITEM</button></div>
+        <div class="menu-description-item" data-food="LIL' MAC"><strong>LIL' MAC</strong> &mdash; Penne Pasta, Liquid Gold, Roasted Jalapenos, Toasted Breadcrumbs, Valentina Hot Sauce, Chives.<button class="view-item-button" data-food="LIL' MAC">VIEW ITEM</button></div>
+        <div class="menu-description-item" data-food="OG MAC"><strong>OG MAC</strong> &mdash; Penne Pasta, Liquid Gold, Roasted Jalapenos, Valentina Hot Sauce, Crispy Onions, Chives, Toasted Breadcrumbs.<button class="view-item-button" data-food="OG MAC">VIEW ITEM</button></div>
+        <div class="menu-description-item" data-food="STREET DOG"><strong>STREET DOG</strong> &mdash; Nathan's Hot Dog, Hot Dog Bun, Chili, Liquid Gold, Diced White Onions, Chives.<button class="view-item-button" data-food="STREET DOG">VIEW ITEM</button></div>
+        <div class="menu-description-item" data-food="THRASH NACHOS"><strong>THRASH NACHOS</strong> &mdash; Nacho Cheese Doritos, Chili, Liquid Gold, Roasted Anaheims, Cilantro.<button class="view-item-button" data-food="THRASH NACHOS">VIEW ITEM</button></div>
+        <div class="menu-description-item" data-food="COLE SLAW"><strong>COLE SLAW</strong> &mdash; Red and Green Cabbage, Carrot Sticks, Mayo, Sugar, White Vinegar.<button class="view-item-button" data-food="COLE SLAW">VIEW ITEM</button></div>
+        <div class="menu-description-item" data-food="FRIED PICKLES"><strong>FRIED PICKLES</strong> &mdash; House-Made Breaded Dill Pickles, Jalapeno Ranch.<button class="view-item-button" data-food="FRIED PICKLES">VIEW ITEM</button></div>
+        <div class="menu-description-item" data-food="MOSH PIT FRIES"><strong>MOSH PIT FRIES</strong> &mdash; French Fries, Liquid Gold, Bacon, Crispy Onions, Fresh Jalapenos.<button class="view-item-button" data-food="MOSH PIT FRIES">VIEW ITEM</button></div>
+      </div>
+    </div>
+    <div class="tab-content section-card" id="food-pics" style="display: none; font-size: 18px;">
+      <div class="sub-tab-bar">
+        <button class="sub-tab-button active" data-subtab="burgers-tab">BURGERS</button>
+        <button class="sub-tab-button" data-subtab="wings-tab">WINGS</button>
+        <button class="sub-tab-button" data-subtab="macs-other-snacks-tab">MACS & OTHER SNACKS</button>
+      </div>
+
+      <div class="sub-tab-content active" id="burgers-tab">
+        <div class="food-grid">
+          <div class="food-card">
+            <h2>THETA BURGER</h2>
+            <img src="./bp-assets-web/theta3.jpg" alt="THETA" />
+          </div>
+          <div class="food-card">
+            <h2>NASHVILLE HOT CHICKEN</h2>
+            <img src="./bp-assets-web/nash.jpg" alt="Nashville Hot Chicken" />
+          </div>
+          <div class="food-card">
+            <h2>OG PUNK</h2>
+            <img src="./bp-assets-web/og.jpg" alt="OG PUNK" />
+          </div>
+          <div class="food-card">
+            <h2>PUNK CHICK SANDY</h2>
+            <img src="./bp-assets-web/punkchk.jpg" alt="PUNK CHICK SANDY" />
+          </div>
+          <div class="food-card">
+            <h2>ONION BURGER</h2>
+            <img src="./bp-assets-web/onion.jpg" alt="ONION" />
+          </div>
+          <div class="food-card">
+            <h2>GREEN CHILI BURGER</h2>
+            <img src="./bp-assets-web/chili.jpg" alt="GREEN CHILI" />
+          </div>
+          <div class="food-card">
+            <h2>WHISKEY MUSHROOM BURGER</h2>
+            <img src="./bp-assets-web/whiskey.jpg" alt="WHISKEY MUSHROOM BURGER" />
+          </div>
+          <div class="food-card">
+            <h2>GREEN DAZE</h2>
+            <img src="./bp-assets-web/green.jpg" alt="GREEN DAZE" />
+          </div>
+          <div class="food-card">
+            <h2>THE CLASH</h2>
+            <img src="./bp-assets-web/clash.jpg" alt="THE CLASH" />
+          </div>
+        </div>
+      </div>
+
+      <div class="sub-tab-content" id="wings-tab">
+        <div class="food-grid">
+          <div class="food-card">
+            <h2>LEMON PEPPER</h2>
+            <img src="./bp-assets-web/lemon.jpg" alt="Lemon Pepper Wings" />
+            <div class="view-description">VIEW DESCRIPTION</div>
+          </div>
+          <div class="food-card">
+            <h2>BUFFALO BILLY</h2>
+            <img src="./bp-assets-web/buffalo.jpg" alt="Buffalo Billy Wings" />
+            <div class="view-description">VIEW DESCRIPTION</div>
+          </div>
+          <div class="food-card">
+            <h2>Sweet Baby Bourbon</h2>
+            <img src="./bp-assets-web/bourbon.jpg" alt="Sweet Baby Bourbon" />
+            <div class="view-description">VIEW DESCRIPTION</div>
+          </div>
+          <div class="food-card">
+            <h2>NASHVILLE HOT</h2>
+            <img src="./bp-assets-web/nashville.jpg" alt="Nashville Hot Wings" />
+            <div class="view-description">VIEW DESCRIPTION</div>
+          </div>
+          <div class="food-card">
+            <h2>TRUFFLE GARLIC PARM</h2>
+            <img src="./bp-assets-web/truffle.jpg" alt="Truffle Garlic Parm" />
+            <div class="view-description">VIEW DESCRIPTION</div>
+          </div>
+          <div class="food-card">
+            <h2>HOT PICKLE</h2>
+            <img src="./bp-assets-web/pickle.jpg" alt="Hot Pickle Wings" />
+            <div class="view-description">VIEW DESCRIPTION</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sub-tab-content" id="macs-other-snacks-tab">
+        <div class="food-grid">
+          <div class="food-card">
+            <h2>NOT-SO-BASIC SALAD</h2>
+            <img src="./bp-assets-web/salad.jpg" alt="Not-So-Basic Salad" />
+            <div class="view-description">VIEW DESCRIPTION</div>
+          </div>
+          <div class="food-card">
+            <h2>LIL' MAC</h2>
+            <img src="./bp-assets-web/mac.jpg" alt="Lil' Mac" />
+            <div class="view-description">VIEW DESCRIPTION</div>
+          </div>
+          <div class="food-card">
+            <h2>OG MAC</h2>
+            <img src="./bp-assets-web/og-mac.jpg" alt="OG Mac" />
+            <div class="view-description">VIEW DESCRIPTION</div>
+          </div>
+          <div class="food-card">
+            <h2>STREET DOG</h2>
+            <img src="./bp-assets-web/street.jpg" alt="Street Dog" />
+            <div class="view-description">VIEW DESCRIPTION</div>
+          </div>
+          <div class="food-card">
+            <h2>COLE SLAW</h2>
+            <img src="./bp-assets-web/slaw.jpg" alt="Cole Slaw" />
+            <div class="view-description">VIEW DESCRIPTION</div>
+          </div>
+          <div class="food-card">
+            <h2>THRASH NACHOS</h2>
+            <img src="./bp-assets-web/thrash.jpg" alt="Thrash Nachos" />
+            <div class="view-description">VIEW DESCRIPTION</div>
+          </div>
+          <div class="food-card">
+            <h2>FRIED PICKLES</h2>
+            <img src="./bp-assets-web/fried-pickles.jpg" alt="Fried Pickles" />
+            <div class="view-description">VIEW DESCRIPTION</div>
+          </div>
+          <div class="food-card">
+            <h2>MOSH PIT FRIES</h2>
+            <img src="./bp-assets-web/mosh.jpg" alt="Mosh Pit Fries" />
+            <div class="view-description">VIEW DESCRIPTION</div>
+          </div>
+        </div>
+      </div>
+
+      <p class="note">Deployment note: upload this HTML file together with the <code>bp-assets-web</code> folder in the same GitHub directory so all image and slideshow links resolve correctly.</p>
+    </div>
+    <div class="tab-content section-card" id="food-slide-show" style="display: none; font-size: 18px;">
+      <h2 style="font-size: 38px; margin-bottom: 18px;">FOOD SLIDE SHOW</h2>
+      <p>Open the Burger Punk food PowerPoint below.</p>
+      <div class="presentation-frame">
+        <img class="presentation-object" src="./bp-assets-web/fpp.jpg" alt="Food slideshow image" />
+        <a href="https://1drv.ms/p/c/3c846e5e8d05f957/IQBI3C1KKQ0TTrEZ11ZtQuMXAaYklCLpIqdMg1OQrVzrMko?e=pwTPUn" target="_blank" rel="noopener noreferrer" class="presentation-overlay-button">OPEN POWERPOINT</a>
+      </div>
+      <p class="presentation-note">Click the button on the image to open the PowerPoint file.</p>
+    </div>
+    <div class="tab-content section-card" id="burger-punk-menu" style="display: none; font-size: 18px;">
+      <h2 style="font-size: 38px; margin-bottom: 18px;">BURGER PUNK MENU</h2>
+      <p>View the Burger Punk menu inside this training site below.</p>
+      <div class="embedded-menu-frame">
+        <iframe src="https://www.burgerpunkokc.com/menu-britton" title="Burger Punk Menu"></iframe>
+      </div>
+      <p class="embedded-menu-fallback">If the menu does not appear, <a href="https://www.burgerpunkokc.com/menu-britton" target="_blank" rel="noopener noreferrer">click here to open it in a new tab</a>.</p>
+    </div>
+    <div class="tab-content section-card" id="blank-menu-test" style="display: none; font-size: 18px;">
+      <h2 style="font-size: 38px; margin-bottom: 18px;">PRACTICE TEST</h2>
+      <p class="test-instruction">Select the correct missing ingredient from the dropdowns. Only some key ingredients are missing from each item.</p>
+      <div class="test-name-entry" style="margin-top: 18px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
+        <label style="color: #f9d2eb; font-size: 16px;">Server Name:</label>
+        <input id="serverNameInput" class="name-input" placeholder="Enter your name" style="width: 240px;" />
+      </div>
+      <div class="menu-test-list">
+        <div class="menu-test-item"><strong>THETA BURGER</strong> &mdash; Brioche Bun, Ground Beef Patty, <input class="blank-input" data-options="Mustard|Ketchup|Honey Mustard|Mayonnaise|Honey" placeholder="______" /> , Pickles, Hickory Sauce, <input class="blank-input" data-options="Swiss Cheese|Cheddar Cheese|Tomato|Lettuce|American Cheese" placeholder="______" />.</div>
+        <div class="menu-test-item"><strong>NASHVILLE HOT CHICKEN</strong> &mdash; Brioche Bun, Nashville Breaded Chicken Breast, <input class="blank-input" data-options="Ketchup|Mayo|Honey Mustard|Garlic Oil|Nashville Hot Oil|Spicy Pickle Oil" placeholder="______" /> , House-made Cole Slaw, Nashville Glaze, <input class="blank-input" data-options="Lettuce|Pickles|Tomato|Red Onions|Parmesan Cheese" placeholder="______" />.</div>
+        <div class="menu-test-item"><strong>PUNK CHICK SANDY</strong> &mdash; Brioche Bun, Fried Marinated Punk Chicken Breast, <input class="blank-input" data-options="Ketchup|Mayo|Mustard|Sour Cream|Punk Sauce" placeholder="______" /> , Lettuce, <input class="blank-input" data-options="Pickles|Tomato|Mushrooms|American Cheese|Nacho Cheese Doritos" placeholder="______" />.</div>
+        <div class="menu-test-item"><strong>ONION SMASH BURGER</strong> &mdash; Brioche Bun, Smashed Ground Beef Patty, Thinly Sliced Grilled Onions, <input class="blank-input" data-options="American Cheese|CHeddar Cheese|Swiss Cheese|Parmesan Cheese" placeholder="______" /> , Pickles, <input class="blank-input" data-options="Mustard|Hot mustard|Dijon Mustard|Punk Sauce|Punk Ranch" placeholder="______" />.</div>
+        <div class="menu-test-item"><strong>GREEN CHILI BURGER</strong> &mdash; Brioche Bun, Ground Beef Patty, <input class="blank-input" data-options="Roasted Anaheim Peppers|Roasted Jalapeno Peppers|Fried Tomatoes|Roasted Habaneros|Ketchup" placeholder="______" /> , Bacon, <input class="blank-input" data-options="Punk Sauce|Punk Ranch|Jalapeno Ranch|Mustard|Ketchup|Lettuce" placeholder="______" /> , American Cheese.</div>
+        <div class="menu-test-item"><strong>WHISKEY MUSHROOM BURGER</strong> &mdash; Brioche Bun, Ground Beef Patty, <input class="blank-input" data-options="American Cheese|SHredded Cheddar|Swiss Cheese|Mozzarella Cheese|Lettuce" placeholder="______" /> , Grilled Mushrooms, Whiskey Go Go Sauce, <input class="blank-input" data-options="Mayo|Hoison Mayo|Truffle Mayo|Sour Cream|Bacon" placeholder="______" />.</div>
+        <div class="menu-test-item"><strong>GREEN DAZE</strong> &mdash; Brioche Bun, Veggie Patty, American Cheese, Lettuce, <input class="blank-input" data-options="Punk Sauce|Punk Ranch|Jalapeno Ranch|Mustard|BBQ" placeholder="______" /> , Pickles.</div>
+        <div class="menu-test-item"><strong>OG PUNK</strong> &mdash; Brioche Bun, Ground Beef Patty, <input class="blank-input" data-options="Swiss Cheese|Gouda Cheese|American Cheese|Shredded Cheese|Cheddar Cheese" placeholder="______" /> , Lettuce, Pickles, <input class="blank-input" data-options="Punk Ranch|Punk Sauce|Ketchup|Mustard|Honey" placeholder="______" />.</div>
+        <div class="menu-test-item"><strong>THE CLASH</strong> &mdash; Brioche Bun, Ground Beef Patty, <input class="blank-input" data-options="Hoisin Mayo|Truffle Mayo|Truffle Oil|Ketchup|Mustard" placeholder="______" /> , Cilantro, Lime Juice, <input class="blank-input" data-options="Lemon Juice|Nacho Cheese Doritos|Lays Chips|Cheetos|OJ" placeholder="______" /> , <input class="blank-input" data-options="Cheddar Cheese|White Cooper Cheese|American Cheese|Provolone|Swiss Cheese" placeholder="______" /> , Grilled Onions, Grilled Jalapenos.</div>
+        <div class="menu-test-item"><strong>LEMON PEPPER WINGS</strong> &mdash; 6 or 12 chicken wings, <input class="blank-input" data-options="House-Made Lemon Pepper Seasoning|Store Bought Lemon Pepper Seasoning|Paprika +Garlic Salt|Lawry's Seasoning Salt|Sea Salt" placeholder="______" /> , Lemon juice, <input class="blank-input" data-options="Lime Zest|Lemon Zest|Orange Zest|Candied Lemon Peels|Chives" placeholder="______" /> , Lemon wedges.</div>
+        <div class="menu-test-item"><strong>NASHVILLE HOT WINGS</strong> &mdash; 6 or 12 chicken wings, <input class="blank-input" data-options="Nashville Hot Oil|OKC Hot Oil|Garlic Oil|Gochujang Oil|Nashville Butter Cream" placeholder="______" /> , <input class="blank-input" data-options="Dill|Chives|Parsley|Parmesan Cheese|Pickles" placeholder="______" />.</div>
+        <div class="menu-test-item"><strong>BUFFALO BILLY WINGS</strong> &mdash; 6 or 12 chicken wings, <input class="blank-input" data-options="Hot Pickle Sauce|Louisiana Sauce|Tabasco|Franks Red Hot|House-made Buffalo Billy Sauce" placeholder="______" /> , <input class="blank-input" data-options="parsley|onions|chives|dill|pepper|dill weed" placeholder="______" /> , Celery Sticks.</div>
+        <div class="menu-test-item"><strong>SWEET BABY BOURBON</strong> &mdash; 6 or 12 chicken wings, <input class="blank-input" data-options="Truffle Mayo|Truffle Oil|Nashville Hot Oil|Whiskey GoGo Sauce|Bourbon Garlic Butter" placeholder="______" /> , <input class="blank-input" data-options="BLack and White sesame Seeds|Pickles|Chives|Parsley|Parmesan Cheese|White Sesame Seeds" placeholder="______" />.</div>
+        <div class="menu-test-item"><strong>TRUFFLE GARLIC PARM</strong> &mdash; 6 or 12 chicken wings, <input class="blank-input" data-options="Nashville Hot Oil|Garlic Oil|Mint Oil|Truffle Oil|Truffle Mayo" placeholder="______" /> , <input class="blank-input" data-options="Grated Gouda Cheese|Shaved Provolone|Shredded Swiss|Parmesan Cheese|Pepperjack Cheese" placeholder="______" /> , Garlic Butter, <input class="blank-input" data-options="Chives|Parsley|Dill|Onions|Pickles|Side Truffle Mayo" placeholder="______" />.</div>
+        <div class="menu-test-item"><strong>HOT PICKLE WINGS</strong> &mdash; 6 or 12 chicken wings, <input class="blank-input" data-options="Buffalo Billy Sauce|Hot Pickle Buffalo Sauce|BBQ|Whiskey GOGO Sauce|Pickle Dry Rub|Franks Pickle Sauce" placeholder="______" /> , <input class="blank-input" data-options="Pickles|Dill|Dill Weed|Jalapenos|Lime Wedges" placeholder="______" />.</div>
+        <div class="menu-test-item"><strong>NOT-SO-BASIC SALAD</strong> &mdash; Leaf Lettuce, <input class="blank-input" data-options="Herbal Vinaigrette|Champagne Vin|Beer Vin|Oil and Vinegar|Balsamic Vinegar|Ranch" placeholder="______" /> , Tomato, Cucumber, Bacon, <input class="blank-input" data-options="Parmesan Cheese|Croutons|Jalapenos|Red Onions|Bleu Cheese Crumbles" placeholder="______" /> , Hard-Boiled Egg.</div>
+        <div class="menu-test-item"><strong>LIL' MAC</strong> &mdash; Penne Pasta, <input class="blank-input" data-options="Melted Swiss Cheese|Liquid Gold|Liquid Cream Cheese|Cheese Whiz|EZ Liquid Cheese" placeholder="______" /> , Roasted Jalapenos, Toasted Breadcrumbs, <input class="blank-input" data-options="Tabasco|Franks Red Hot|Valentina Hot Sauce|Shredded Cheddar|Sour Cream" placeholder="______" /> , Chives.</div>
+        <div class="menu-test-item"><strong>OG MAC</strong> &mdash; Penne Pasta, <input class="blank-input" data-options="Mozzarella Cheese|Five Cheese Blend|Liquid Gold|EZ Melt|Garlic Butter Cheese" placeholder="______" /> , Roasted Jalapenos, Valentina Hot Sauce, <input class="blank-input" data-options="Croutons|Toasted Breadcrumbs|Shallots|Toasted Pecans|Garlic Butter" placeholder="______" /> , Chives, <input class="blank-input" data-options="Crispy Bacon|Fried Mushrooms|French Fries|Crispy Onions" placeholder="______" />.</div>
+        <div class="menu-test-item"><strong>STREET DOG</strong> &mdash; Nathan's Hot Dog, Hot Dog Bun, Chili, <input class="blank-input" data-options="Shredded Cheddar|American Slices|Cheese Whiz|Liquid Gold|Pickle Relish" placeholder="______" /> , Diced White Onions, Chives.</div>
+        <div class="menu-test-item"><strong>THRASH NACHOS</strong> &mdash; Nacho Cheese Doritos, Chili, <input class="blank-input" data-options="Liquid Gold|Pickle Relish|Jalapeno Slices|Sour Cream|Salsa" placeholder="______" /> , Roasted Anaheims, <input class="blank-input" data-options="Parsley|Cilantro|Chives|Ground Beef|Chicken" placeholder="______" />.</div>
+        <div class="menu-test-item"><strong>COLE SLAW</strong> &mdash; <input class="blank-input" data-options="Tomatoes|Blue|Green|Cilantro|Sesame Seeds|Sour Cream" placeholder="______" /> and <input class="blank-input" data-options="Red|Onions|Heavy Cream|Iceberg|Gluten Free" placeholder="______" /> Cabbage, Carrot Sticks, Mayo, Sugar, White Vinegar.</div>
+        <div class="menu-test-item"><strong>FRIED PICKLES</strong> &mdash; House-Made Breaded Pickles, <input class="blank-input" data-options="Punk Sauce|Punk Ranch|Honey Mustard|Jalapeno Ranch|Sriracha|Gochujang" placeholder="______" />.</div>
+        <div class="menu-test-item"><strong>MOSH PIT FRIES</strong> &mdash; French Fries, <input class="blank-input" data-options="Cheese Whiz|Melted Swiss|Melted Cheddar|EZ Garlic Cheese White Melt|Liquid Gold" placeholder="______" /> , Bacon, <input class="blank-input" data-options="Nacho Cheese Doritos|Fresno Peppers|Crispy Onions|Ground Beef|Chicken" placeholder="______" /> , Fresh Jalapenos.</div>
+      </div>
+      <div class="menu-test-actions">
+        <button id="gradeTestButton" class="menu-link-button">Grade Test</button>
+        <button id="submitTestButton" class="menu-link-button" style="background: #1a1830; border-color: #7df0f4; color: #7df0f4;">Submit Test</button>
+        <button id="clearTestButton" class="menu-link-button" style="background: #21002f; border-color: #ff9ee3; color: #ff9ee3;">Clear Answers</button>
+      </div>
+      <p id="gradeResult" class="test-feedback"></p>
+    </div>
+    </div>
+    <div class="lightbox" id="lightbox">
+      <div class="lightbox-content">
+        <button class="lightbox-close" id="lightboxClose">&times;</button>
+        <img id="lightboxImage" src="" alt="Food preview" />
+        <div class="lightbox-caption" id="lightboxCaption"></div>
+      </div>
+    </div>
+    <div class="description-modal" id="descriptionModal">
+      <div class="description-modal-content">
+        <button class="description-modal-close" id="descriptionModalClose">&times;</button>
+        <h3 id="descriptionModalTitle">Item description</h3>
+        <p id="descriptionModalText"></p>
+        <img class="description-modal-logo" src="./bp-assets-web/punklogo.jpeg" alt="Burger Punk logo" />
+      </div>
+    </div>
+  <script>
+    const buttons = document.querySelectorAll('.tab-button');
+    const contents = document.querySelectorAll('.tab-content');
+    const subButtons = document.querySelectorAll('.sub-tab-button');
+    const subContents = document.querySelectorAll('.sub-tab-content');
+
+    const assetBases = ['./bp-assets-web/', 'bp-assets-web/', '../bp-assets-web/'];
+    const normalizeAssetFileName = value => {
+      const raw = value.split('/').pop() || '';
+      return decodeURIComponent(raw);
+    };
+
+    const setImageWithFallback = img => {
+      const fileName = normalizeAssetFileName(img.getAttribute('src') || '');
+      if (!fileName) return;
+
+      let attempt = 0;
+      const tryNextBase = () => {
+        if (attempt >= assetBases.length) return;
+        img.src = `${assetBases[attempt]}${fileName}`;
+        attempt += 1;
+      };
+
+      img.addEventListener('error', tryNextBase);
+      tryNextBase();
+    };
+
+    document.querySelectorAll('img[src*="bp-assets-web/"]').forEach(setImageWithFallback);
+
+    const pptLink = document.querySelector('.presentation-overlay-button[href*="bp-assets-web/"]');
+    if (pptLink) {
+      const pptFileName = normalizeAssetFileName(pptLink.getAttribute('href') || '');
+      if (pptFileName) {
+        pptLink.setAttribute('href', `${assetBases[0]}${pptFileName}`);
+      }
+    }
+
+    buttons.forEach(button => {
+      button.addEventListener('click', () => {
+        buttons.forEach(btn => btn.classList.remove('active'));
+        contents.forEach(content => {
+          content.style.display = 'none';
+          content.classList.remove('active');
+        });
+        button.classList.add('active');
+        const selected = document.getElementById(button.dataset.tab);
+        selected.style.display = 'block';
+        selected.classList.add('active');
+      });
+    });
+
+    subButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        subButtons.forEach(btn => btn.classList.remove('active'));
+        subContents.forEach(content => content.classList.remove('active'));
+        button.classList.add('active');
+        const selected = document.getElementById(button.dataset.subtab);
+        selected.classList.add('active');
+      });
+    });
+
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImage = document.getElementById('lightboxImage');
+    const lightboxCaption = document.getElementById('lightboxCaption');
+    const lightboxClose = document.getElementById('lightboxClose');
+    const foodImages = document.querySelectorAll('.food-card img');
+    const descriptionModal = document.getElementById('descriptionModal');
+    const descriptionModalTitle = document.getElementById('descriptionModalTitle');
+    const descriptionModalText = document.getElementById('descriptionModalText');
+    const descriptionModalClose = document.getElementById('descriptionModalClose');
+    let openedFromMenuDescriptions = false;
+
+    function showDescriptionModal(title, text) {
+      descriptionModalTitle.textContent = title;
+      descriptionModalText.innerHTML = text;
+      descriptionModal.classList.add('active');
+    }
+
+    function hideDescriptionModal() {
+      descriptionModal.classList.remove('active');
+      descriptionModalTitle.textContent = '';
+      descriptionModalText.textContent = '';
+    }
+
+    foodImages.forEach(img => {
+      let viewDescription = img.nextElementSibling;
+      if (!viewDescription || !viewDescription.classList.contains('view-description')) {
+        viewDescription = document.createElement('div');
+        viewDescription.className = 'view-description';
+        viewDescription.textContent = 'VIEW DESCRIPTION';
+        img.insertAdjacentElement('afterend', viewDescription);
+      }
+
+      if (img.alt.trim().toUpperCase() === 'THETA') {
+        viewDescription.classList.add('clickable');
+        viewDescription.dataset.description = '<ul><li>Brioche Bun</li><li>Ground Beef Patty</li><li>Mayonnaise</li><li>Pickles</li><li>Hickory Sauce</li><li>Cheddar Cheese</li></ul>';
+        viewDescription.addEventListener('click', () => {
+          showDescriptionModal('THETA BURGER', viewDescription.dataset.description);
+        });
+      }
+
+      if (img.alt.trim().toUpperCase() === 'NASHVILLE HOT CHICKEN') {
+        viewDescription.classList.add('clickable');
+        viewDescription.dataset.description = '<ul><li>Brioche Bun</li><li>Nashville Breaded Chicken Breast</li><li>Nashville Hot Oil</li><li>House-made Cole Slaw</li><li>Nashville Glaze</li><li>Pickles</li></ul>';
+        viewDescription.addEventListener('click', () => {
+          showDescriptionModal('NASHVILLE HOT CHICKEN', viewDescription.dataset.description);
+        });
+      }
+
+      if (img.alt.trim().toUpperCase() === 'PUNK CHICK SANDY') {
+        viewDescription.classList.add('clickable');
+        viewDescription.dataset.description = '<ul><li>Brioche Bun</li><li>Fried, Marinated Punk Chicken Breast</li><li>Punk Sauce</li><li>Lettuce</li><li>Pickles</li></ul>';
+        viewDescription.addEventListener('click', () => {
+          showDescriptionModal('PUNK CHICK SANDY', viewDescription.dataset.description);
+        });
+      }
+
+      if (img.alt.trim().toUpperCase() === 'ONION') {
+        viewDescription.classList.add('clickable');
+        viewDescription.dataset.description = '<ul><li>Brioche Bun</li><li>Smashed Ground Beef Patty</li><li>Thinly Sliced Grilled Onions</li><li>Punk Sauce</li><li>Pickles</li><li>American Cheese</li></ul>';
+        viewDescription.addEventListener('click', () => {
+          showDescriptionModal('ONION SMASH BURGER', viewDescription.dataset.description);
+        });
+      }
+
+      if (img.alt.trim().toUpperCase() === 'GREEN CHILI') {
+        viewDescription.classList.add('clickable');
+        viewDescription.dataset.description = '<ul><li>Brioche Bun</li><li>Ground Beef Patty</li><li>Punk Ranch</li><li>Bacon</li><li>Roasted Anaheim Peppers</li><li>American Cheese</li></ul>';
+        viewDescription.addEventListener('click', () => {
+          showDescriptionModal('GREEN CHILI BURGER', viewDescription.dataset.description);
+        });
+      }
+
+      if (img.alt.trim().toUpperCase() === 'WHISKEY MUSHROOM BURGER') {
+        viewDescription.classList.add('clickable');
+        viewDescription.dataset.description = '<ul><li>Brioche Bun</li><li>Ground Beef Patty</li><li>Swiss Cheese</li><li>Grilled Mushrooms</li><li>Whiskey Go Go Sauce</li><li>Truffle Mayo</li></ul>';
+        viewDescription.addEventListener('click', () => {
+          showDescriptionModal('WHISKEY MUSHROOM BURGER', viewDescription.dataset.description);
+        });
+      }
+
+      if (img.alt.trim().toUpperCase() === 'GREEN DAZE') {
+        viewDescription.classList.add('clickable');
+        viewDescription.dataset.description = '<ul><li>Brioche Bun</li><li>Veggie Patty</li><li>American Cheese</li><li>Lettuce</li><li>Punk Sauce</li><li>Pickles</li></ul>';
+        viewDescription.addEventListener('click', () => {
+          showDescriptionModal('GREEN DAZE', viewDescription.dataset.description);
+        });
+      }
+
+      if (img.alt.trim().toUpperCase() === 'OG PUNK') {
+        viewDescription.classList.add('clickable');
+        viewDescription.dataset.description = '<ul><li>Brioche Bun</li><li>Ground Beef Patty</li><li>Punk Sauce</li><li>Lettuce</li><li>Pickles</li><li>American Cheese</li></ul>';
+        viewDescription.addEventListener('click', () => {
+          showDescriptionModal('OG PUNK', viewDescription.dataset.description);
+        });
+      }
+
+      if (img.alt.trim().toUpperCase() === 'THE CLASH') {
+        viewDescription.classList.add('clickable');
+        viewDescription.dataset.description = '<ul><li>Brioche Bun</li><li>Ground Beef Patty</li><li>Hoison Mayo</li><li>Cilantro</li><li>Lime Juice</li><li>Nacho Cheese Doritos</li><li>American Cheese</li><li>Grilled Onions</li><li>Grilled Jalapenos</li></ul>';
+        viewDescription.addEventListener('click', () => {
+          showDescriptionModal('THE CLASH', viewDescription.dataset.description);
+        });
+      }
+
+      if (img.alt.trim().toUpperCase() === 'NOT-SO-BASIC SALAD') {
+        viewDescription.classList.add('clickable');
+        viewDescription.dataset.description = '<ul><li>Leaf Lettuce</li><li>Beer Vinaigrette</li><li>Tomato</li><li>Cucumber</li><li>Bacon</li><li>Bleu Cheese Crumbles</li><li>Hard-Boiled Egg</li><li>Add Chicken (Optional)</li></ul>';
+        viewDescription.addEventListener('click', () => {
+          showDescriptionModal('NOT-SO-BASIC SALAD', viewDescription.dataset.description);
+        });
+      }
+
+      if (img.alt.trim().toUpperCase() === "LIL' MAC") {
+        viewDescription.classList.add('clickable');
+        viewDescription.dataset.description = '<ul><li>Penne Pasta</li><li>Liquid Gold</li><li>Roasted Jalapenos</li><li>Toasted Breadcrumbs</li><li>Valentina Hot Sauce</li><li>Chives</li></ul>';
+        viewDescription.addEventListener('click', () => {
+          showDescriptionModal("LIL' MAC", viewDescription.dataset.description);
+        });
+      }
+
+      if (img.alt.trim().toUpperCase() === 'OG MAC') {
+        viewDescription.classList.add('clickable');
+        viewDescription.dataset.description = '<ul><li>Penne Pasta</li><li>Liquid Gold</li><li>Roasted Jalapenos</li><li>Valentina Hot Sauce</li><li>Crispy Onions</li><li>Chives</li><li>Toasted Breadcrumbs</li></ul>';
+        viewDescription.addEventListener('click', () => {
+          showDescriptionModal('OG MAC', viewDescription.dataset.description);
+        });
+      }
+
+      if (img.alt.trim().toUpperCase() === 'STREET DOG') {
+        viewDescription.classList.add('clickable');
+        viewDescription.dataset.description = '<ul><li>Nathan\'s Hot Dog</li><li>Hot Dog Bun</li><li>Chili</li><li>Liquid Gold</li><li>Diced White Onions</li><li>Chives</li></ul>';
+        viewDescription.addEventListener('click', () => {
+          showDescriptionModal('STREET DOG', viewDescription.dataset.description);
+        });
+      }
+
+      if (img.alt.trim().toUpperCase() === 'COLE SLAW') {
+        viewDescription.classList.add('clickable');
+        viewDescription.dataset.description = '<ul><li>Red and Green Cabbage</li><li>Carrot Sticks</li><li>Mayo</li><li>Sugar</li><li>White Vinegar</li></ul>';
+        viewDescription.addEventListener('click', () => {
+          showDescriptionModal('COLE SLAW', viewDescription.dataset.description);
+        });
+      }
+      if (img.alt.trim().toUpperCase() === 'MOSH PIT FRIES') {
+        viewDescription.classList.add('clickable');
+        viewDescription.dataset.description = '<ul><li>French Fries</li><li>Liquid Gold</li><li>Bacon</li><li>Crispy Onions</li><li>Fresh Jalapenos</li></ul>';
+        viewDescription.addEventListener('click', () => {
+          showDescriptionModal('MOSH PIT FRIES', viewDescription.dataset.description);
+        });
+      }
+      if (img.alt.trim().toUpperCase() === 'THRASH NACHOS') {
+        viewDescription.classList.add('clickable');
+        viewDescription.dataset.description = '<ul><li>Nacho Cheese Doritos</li><li>Chili</li><li>Liquid Gold</li><li>Roasted Anaheims</li><li>Cilantro</li></ul>';
+        viewDescription.addEventListener('click', () => {
+          showDescriptionModal('THRASH NACHOS', viewDescription.dataset.description);
+        });
+      }
+
+      if (img.alt.trim().toUpperCase() === 'LEMON PEPPER WINGS') {
+        viewDescription.classList.add('clickable');
+        viewDescription.dataset.description = '<ul><li>6 or 12 chicken wings</li><li>House-made lemon pepper seasoning</li><li>Lemon juice</li><li>Lemon zest</li><li>Lemon wedges</li></ul>';
+        viewDescription.addEventListener('click', () => {
+          showDescriptionModal('LEMON PEPPER WINGS', viewDescription.dataset.description);
+        });
+      }
+
+      if (img.alt.trim().toUpperCase() === 'NASHVILLE HOT WINGS') {
+        viewDescription.classList.add('clickable');
+        viewDescription.dataset.description = '<ul><li>6 or 12 chicken wings</li><li>Nashville Hot Oil</li><li>Dill Pickles</li></ul>';
+        viewDescription.addEventListener('click', () => {
+          showDescriptionModal('NASHVILLE HOT WINGS', viewDescription.dataset.description);
+        });
+      }
+
+      if (img.alt.trim().toUpperCase() === 'BUFFALO BILLY WINGS') {
+        viewDescription.classList.add('clickable');
+        viewDescription.dataset.description = '<ul><li>6 or 12 chicken wings</li><li>House-made Buffalo Billy Sauce</li><li>Chives</li><li>Celery Sticks</li></ul>';
+        viewDescription.addEventListener('click', () => {
+          showDescriptionModal('BUFFALO BILLY WINGS', viewDescription.dataset.description);
+        });
+      }
+
+      if (img.alt.trim().toUpperCase() === 'SWEET BABY BOURBON') {
+        viewDescription.classList.add('clickable');
+        viewDescription.dataset.description = '<ul><li>6 or 12 chicken wings</li><li>House-made Whiskey Go-Go Sauce</li><li>White Sesame Seeds</li></ul>';
+        viewDescription.addEventListener('click', () => {
+          showDescriptionModal('SWEET BABY BOURBON', viewDescription.dataset.description);
+        });
+      }
+      if (img.alt.trim().toUpperCase() === 'TRUFFLE GARLIC PARM') {
+        viewDescription.classList.add('clickable');
+        viewDescription.dataset.description = '<ul><li>6 or 12 chicken wings</li><li>Truffle Oil</li><li>Parmesan Cheese</li><li>Garlic Butter</li><li>Parsley</li></ul>';
+        viewDescription.addEventListener('click', () => {
+          showDescriptionModal('TRUFFLE GARLIC PARM', viewDescription.dataset.description);
+        });
+      }
+
+      if (img.alt.trim().toUpperCase() === 'FRIED PICKLES') {
+        viewDescription.classList.add('clickable');
+        viewDescription.dataset.description = '<ul><li>House-Made Breaded Dill Pickles</li><li>Jalapeno Ranch</li></ul>';
+        viewDescription.addEventListener('click', () => {
+          showDescriptionModal('FRIED PICKLES', viewDescription.dataset.description);
+        });
+      }
+
+      if (img.alt.trim().toUpperCase() === 'HOT PICKLE WINGS') {
+        viewDescription.classList.add('clickable');
+        viewDescription.dataset.description = '<ul><li>6 or 12 chicken wings</li><li>House-made Hot Pickle Sauce</li><li>Dill Pickles</li></ul>';
+        viewDescription.addEventListener('click', () => {
+          showDescriptionModal('HOT PICKLE WINGS', viewDescription.dataset.description);
+        });
+      }
+
+      img.addEventListener('click', () => {
+        openedFromMenuDescriptions = false;
+        lightboxImage.src = img.src;
+        lightboxCaption.textContent = img.alt.toUpperCase();
+        lightbox.classList.add('active');
+      });
+    });
+
+    const viewItemButtons = document.querySelectorAll('.view-item-button');
+    const foodImagesByAlt = Array.from(foodImages).reduce((map, img) => {
+      map[img.alt.trim().toUpperCase()] = img;
+      return map;
+    }, {});
+
+    const openFoodItem = foodName => {
+      const targetImg = foodImagesByAlt[foodName.trim().toUpperCase()];
+      if (!targetImg) return;
+
+      openedFromMenuDescriptions = true;
+      const foodPicsTab = document.querySelector('.tab-button[data-tab="food-pics"]');
+      if (foodPicsTab) {
+        foodPicsTab.click();
+      }
+
+      const subTab = targetImg.closest('.sub-tab-content');
+      if (subTab && subTab.id) {
+        const subTabButton = document.querySelector(`.sub-tab-button[data-subtab="${subTab.id}"]`);
+        if (subTabButton) {
+          subTabButton.click();
+        }
+      }
+
+      targetImg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      lightboxImage.src = targetImg.src;
+      lightboxCaption.textContent = targetImg.alt.toUpperCase();
+      lightbox.classList.add('active');
+    };
+
+    viewItemButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        openFoodItem(button.dataset.food || '');
+      });
+    });
+
+    const blankAnswers = [
+      ['mayonnaise', 'mayo'], ['cheddar cheese'],
+      ['nashville hot oil'], ['pickles'],
+      ['punk sauce'], ['pickles'],
+      ['american cheese'], ['punk sauce'],
+      ['roasted anaheim peppers'], ['punk ranch'],
+      ['swiss cheese'], ['truffle mayo'],
+      ['punk sauce'], ['american cheese'], ['punk sauce'],
+      ['hoisin mayo'], ['nacho cheese doritos'], ['american cheese'],
+      ['house-made lemon pepper seasoning', 'lemon pepper seasoning'], ['lemon zest'],
+      ['nashville hot oil'], ['Pickles'],
+      ['house-made buffalo billy sauce'], ['chives'],
+      ['house-made whiskey go-go sauce', 'whiskey gogo sauce', 'whiskey go-go sauce'], ['white sesame seeds'],
+      ['truffle oil'], ['parmesan cheese'], ['parsley'],
+      ['house-made hot pickle sauce', 'hot pickle buffalo sauce'], ['Pickles'],
+      ['beer vinaigrette', 'beer vin'], ['bleu cheese crumbles'],
+      ['liquid gold'], ['valentina hot sauce'],
+      ['liquid gold'], ['crispy onions'], ['toasted breadcrumbs'],
+      ['liquid gold'],
+      ['liquid gold'], ['cilantro'],
+      ['red', 'red cabbage'], ['green', 'green cabbage'],
+      ['jalapeno ranch'],
+      ['liquid gold'], ['crispy onions']
+    ];
+
+    const gradeTestButton = document.getElementById('gradeTestButton');
+    const submitTestButton = document.getElementById('submitTestButton');
+    const clearTestButton = document.getElementById('clearTestButton');
+    const gradeResult = document.getElementById('gradeResult');
+    const serverNameInput = document.getElementById('serverNameInput');
+
+
+    const normalizeAnswer = value => value
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9\s'-]+/g, ' ')
+      .replace(/[\s'-]+/g, ' ')
+      .trim();
+
+    const normalizeTokens = value => normalizeAnswer(value)
+      .split(' ')
+      .filter(Boolean)
+      .sort();
+
+    const tokensMatch = (submitted, expected) => {
+      const submittedTokens = normalizeTokens(submitted);
+      const expectedTokens = normalizeTokens(expected);
+      return submittedTokens.length > 0 && submittedTokens.length === expectedTokens.length && submittedTokens.every((token, index) => token === expectedTokens[index]);
+    };
+
+    const uniqueOptionPool = Array.from(new Set(blankAnswers
+      .flat()
+      .map(answer => answer.trim())
+      .filter(Boolean)));
+
+    const buildFallbackOptions = (index, acceptedAnswers) => {
+      const accepted = acceptedAnswers.map(value => value.trim()).filter(Boolean);
+      const acceptedSet = new Set(accepted.map(value => normalizeAnswer(value)));
+      const options = [...accepted];
+      const maxOptions = 6;
+
+      // Rotate through a shared ingredient pool so each blank gets a varied dropdown.
+      for (let offset = 0; options.length < maxOptions && offset < uniqueOptionPool.length; offset += 1) {
+        const candidate = uniqueOptionPool[(index + offset) % uniqueOptionPool.length];
+        if (!candidate) continue;
+        const normalized = normalizeAnswer(candidate);
+        if (acceptedSet.has(normalized) || options.some(option => normalizeAnswer(option) === normalized)) {
+          continue;
+        }
+        options.push(candidate);
+      }
+
+      return options;
+    };
+
+    const initializeBlankDropdowns = () => {
+      const blanks = Array.from(document.querySelectorAll('#blank-menu-test .blank-input'));
+
+      blanks.forEach((field, index) => {
+        if (field.tagName === 'SELECT') return;
+
+        const acceptedAnswers = blankAnswers[index] || [];
+        const customOptions = (field.dataset.options || '')
+          .split('|')
+          .map(option => option.trim())
+          .filter(Boolean);
+
+        const options = customOptions.length > 0
+          ? customOptions
+          : buildFallbackOptions(index, acceptedAnswers);
+
+        // Ensure at least one accepted answer is present in the dropdown.
+        acceptedAnswers.forEach(answer => {
+          const normalized = normalizeAnswer(answer);
+          if (!options.some(option => normalizeAnswer(option) === normalized)) {
+            options.push(answer);
+          }
+        });
+
+        const select = document.createElement('select');
+        select.className = field.className;
+        select.setAttribute('aria-label', `Practice test answer ${index + 1}`);
+
+        const placeholderOption = document.createElement('option');
+        placeholderOption.value = '';
+        placeholderOption.textContent = 'Select answer';
+        select.appendChild(placeholderOption);
+
+        options.forEach(option => {
+          const optionEl = document.createElement('option');
+          optionEl.value = option;
+          optionEl.textContent = option;
+          select.appendChild(optionEl);
+        });
+
+        field.replaceWith(select);
+      });
+    };
+
+    initializeBlankDropdowns();
+
+    const gradeBlankMenuTest = () => {
+      const blanks = Array.from(document.querySelectorAll('#blank-menu-test .blank-input'));
+      let correctCount = 0;
+      blanks.forEach((input, index) => {
+        const answer = input.value || '';
+        const accepted = blankAnswers[index] || [];
+        const matched = accepted.some(key => tokensMatch(answer, key));
+        input.classList.remove('correct', 'incorrect');
+        if (matched) {
+          input.classList.add('correct');
+          correctCount += 1;
+        } else {
+          input.classList.add('incorrect');
+        }
+      });
+
+      const wrongCount = blanks.length - correctCount;
+      const percentage = Math.round((correctCount / blanks.length) * 100);
+      gradeResult.innerHTML = `Grade: <strong>${correctCount} / ${blanks.length}</strong> correct (${percentage}%)<br>${wrongCount} wrong.`;
+      if (wrongCount === 0) {
+        gradeResult.innerHTML += ' Excellent work!';
+      } else if (wrongCount <= 5) {
+        gradeResult.innerHTML += ' Very close &mdash; just a few small changes.';
+      }
+    };
+
+    const clearBlankMenuTest = () => {
+      const blanks = document.querySelectorAll('#blank-menu-test .blank-input');
+      blanks.forEach(input => {
+        input.value = '';
+        input.classList.remove('correct', 'incorrect');
+      });
+      serverNameInput.value = '';
+      gradeResult.textContent = '';
+    };
+
+    const submitPracticeTest = async () => {
+      gradeBlankMenuTest();
+      const serverName = serverNameInput.value.trim();
+      if (!serverName) {
+        gradeResult.innerHTML += '<br><strong>Please enter your name before submitting.</strong>';
+        return;
+      }
+      const blanks = Array.from(document.querySelectorAll('#blank-menu-test .blank-input'));
+      const correctCount = blanks.filter(input => input.classList.contains('correct')).length;
+      const percentage = Math.round((correctCount / blanks.length) * 100);
+      const payload = {
+        serverName,
+        correctCount,
+        totalCount: blanks.length,
+        percentage,
+      };
+
+      gradeResult.innerHTML += '<br><strong>Submitting test results to backend...</strong>';
+
+      try {
+        const response = await fetch('http://localhost:3000/send-test-results', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(errorText || response.statusText);
+        }
+
+        const result = await response.json();
+        gradeResult.innerHTML += `<br><strong>Test submitted.</strong> ${result.message}`;
+      } catch (error) {
+        gradeResult.innerHTML += `<br><strong>Backend submission failed:</strong> ${error.message}`;
+        gradeResult.innerHTML += '<br><strong>Make sure the local backend is running on http://localhost:3000.</strong>';
+      }
+    };
+
+    gradeTestButton.addEventListener('click', gradeBlankMenuTest);
+    submitTestButton.addEventListener('click', submitPracticeTest);
+    clearTestButton.addEventListener('click', clearBlankMenuTest);
+
+    descriptionModalClose.addEventListener('click', hideDescriptionModal);
+    descriptionModal.addEventListener('click', event => {
+      if (event.target === descriptionModal) {
+        hideDescriptionModal();
+      }
+    });
+
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && descriptionModal.classList.contains('active')) {
+        hideDescriptionModal();
+      }
+    });
+
+    const hideLightbox = () => {
+      lightbox.classList.remove('active');
+      lightboxImage.src = '';
+      lightboxCaption.textContent = '';
+      if (openedFromMenuDescriptions) {
+        const menuDescriptionsTab = document.querySelector('.tab-button[data-tab="menu-descriptions"]');
+        if (menuDescriptionsTab) {
+          menuDescriptionsTab.click();
+        }
+      }
+      openedFromMenuDescriptions = false;
+    };
+
+    lightboxClose.addEventListener('click', hideLightbox);
+    lightbox.addEventListener('click', event => {
+      if (event.target === lightbox) {
+        hideLightbox();
+      }
+    });
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && lightbox.classList.contains('active')) {
+        hideLightbox();
+      }
+    });
+
+  </script>
+</body>
+</html>
+
